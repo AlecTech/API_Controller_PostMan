@@ -36,6 +36,11 @@ namespace APIControllerPostManPractice.Models
                 .HasCharSet("utf8mb4")
                 .HasCollation("utf8mb4_general_ci");
 
+                //if defaults needed
+                //entity.Property(e => e.Quantity).HasDefaultValue(0);
+
+                //entity.Property(e => e.Discontinued).HasDefaultValue(false);
+
                 entity.HasData
                 (
                     new Product()
@@ -92,7 +97,7 @@ namespace APIControllerPostManPractice.Models
                         ID = -8,
                         Name = "Sofa",
                         Quantity = 1,
-                        Discontinued = false
+                        Discontinued = true
                     },
                     new Product()
                     {
