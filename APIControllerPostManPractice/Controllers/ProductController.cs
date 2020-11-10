@@ -140,6 +140,45 @@ namespace APIControllerPostManPractice.Controllers
             return result;
         }
 
+        public Product DiscontinueProductByID(string id)
+        {
+            int parsedID;
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentNullException(nameof(id), "Product ID is missing.");
+            }
+            else
+            {
+                id = id.Trim();
+                if (!int.TryParse(id, out parsedID))
+                {
+                    throw new ArgumentException("Product ID was is not valid.", nameof(id));
+                }
+            }
+            
+
+            Product result;
+           
+            using (InventoryContext context = new InventoryContext())
+            {
+                
+                //Int32 value = -1;
+                //value = context.Products.Where(x => x.ID == parsedID).Single();
+
+                //if (value > 0)
+                //{
+                //    throw new ArgumentException("Product with this ID Already Discontinued ", nameof(id));
+                //}
+                
+                result = context.Products.Where(x => x.ID == parsedID).Single();
+                result.Discontinued = true;
+                context.SaveChanges();
+            }
+
+            return result;
+        }
+
 
 
         //public Product CreateProduct(string categoryID, string name)
