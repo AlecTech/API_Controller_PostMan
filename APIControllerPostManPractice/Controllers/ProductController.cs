@@ -85,17 +85,29 @@ namespace APIControllerPostManPractice.Controllers
             }
      
         }
-        //Gets All Products
+        //Gets All Active Products ascending order
         public List<Product> GetInventory()
         {
             List<Product> results;
             using (InventoryContext context = new InventoryContext())
             {
-                results = context.Products.Where(x => x.Discontinued == false).OrderBy(x => x.Quantity).ToList();
-                //results = context.Products.ToList();
+                results = context.Products.Where(x => x.Discontinued == false).OrderBy(x => x.Quantity).ToList();          
             }
             return results;
         }
+        //Get All inventory in alphabetical order
+        public List<Product> GetAllInventory()
+        {
+            List<Product> results;
+            using (InventoryContext context = new InventoryContext())
+            {
+                results = context.Products.OrderBy(x => x.Name).ToList();
+            }
+            return results;
+        }
+
+
+
         //Gets ById
         public Product GetProductByID(string productID)
         {

@@ -16,6 +16,12 @@ namespace APIControllerPostManPractice.Controllers
         [HttpGet("All")]
         public ActionResult<IEnumerable<Product>> AllProducts_GET()
         {
+            return new ProductController().GetAllInventory();
+        }
+
+        [HttpGet("Active")]
+        public ActionResult<IEnumerable<Product>> AllActiveProducts_GET()
+        {
             return new ProductController().GetInventory();
         }
 
@@ -46,28 +52,48 @@ namespace APIControllerPostManPractice.Controllers
             return result;
         }
 
-        //[HttpGet("ByCategoryID")]
-        //public ActionResult<IEnumerable<Product>> ProductsByCategoryID_GET(string categoryID)
+        [HttpPost("Create")]
+        public ActionResult<Product> ProductCreate_POST(string name, string quantity, string discontinued)
+        {
+            ActionResult<Product> response;
+            Product result;
+            try
+            {
+                
+                result = new ProductController().CreateProduct(name, quantity, discontinued);
+                
+                response = Ok(result);
+            }
+            catch (Exception e)
+            {
+                response = BadRequest(new { error = e.Message });
+            }
+
+            return response;
+        }
+
+        //[HttpPost("Create")]
+        //public ActionResult<Product> ProductCreate_POST(string name, string quantity, string discontinued)
         //{
-        //    ActionResult<IEnumerable<Product>> result;
+        //    ActionResult<Product> result;
         //    try
         //    {
-        //        result = new ProductController().GetProductsByCategoryID(categoryID);
+        //        result = new ProductController().CreateProduct(name, quantity, discontinued);
+        //    }
+        //    catch (ValidationException e)
+        //    {
+        //        string error = "Error(s) During Creation: " +
+        //            e.ValidationExceptions.Select(x => x.Message)
+        //            .Aggregate((x, y) => x + ", " + y);
 
+        //        result = BadRequest(error);
         //    }
-        //    catch (ArgumentNullException e)
+        //    catch (Exception e)
         //    {
-        //        result = BadRequest(e.Message);
-        //    }
-        //    catch (ArgumentException e)
-        //    {
-        //        result = BadRequest(e.Message);
-        //    }
-        //    catch (KeyNotFoundException e)
-        //    {
-        //        result = NotFound(e.Message);
+        //        result = StatusCode(500, "Unknown error occurred, please try again later.");
         //    }
         //    return result;
+
         //}
 
 
