@@ -139,8 +139,30 @@ namespace APIControllerPostManPractice.Controllers
             }
             catch (Exception e)
             {
-                response = StatusCode(404, e.Message); ;
+                response = StatusCode(404, e.Message); 
             }
+            return response;
+        }
+        [HttpPatch("SubtractProduct")]
+        public ActionResult<Product> SubtractProduct_PATCH(string id, string amount)
+        {
+            ActionResult<Product> response;
+            Product result;
+            try
+            {
+                result = new ProductController().SendProductByID(id, amount);
+
+                response = Ok(result);
+            }
+            catch (InvalidOperationException)
+            {
+                response = StatusCode(404, new  { error = $"No product was found with the ID of {id}."} );
+            }
+            catch (Exception e)
+            {
+                response = StatusCode(404, e.Message ); 
+            }
+
             return response;
         }
 

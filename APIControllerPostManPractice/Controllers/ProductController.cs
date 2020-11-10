@@ -219,6 +219,45 @@ namespace APIControllerPostManPractice.Controllers
             return result;
         }
 
+        public Product SendProductByID(string id, string amount)
+        {
+            Product result;
+            int parsedID;
+            int parsedAmount;
+
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentNullException(nameof(id), nameof(id) + "field is null.");
+            }
+            if (!int.TryParse(id, out parsedID))
+            {
+                throw new ArgumentException(nameof(id) + " is not valid.", nameof(id));
+            }
+
+            if (string.IsNullOrWhiteSpace(amount))
+            {
+                throw new ArgumentNullException(nameof(amount), nameof(amount) + " is null.");
+            }
+            if (!int.TryParse(amount, out parsedAmount))
+            {
+                throw new ArgumentException(nameof(amount) + " is not valid.", nameof(amount));
+            }
+
+            using (InventoryContext context = new InventoryContext())
+            {
+
+                result = context.Products.Where(x => x.ID == parsedID).Single();
+                if (result.Quantity - parsedAmount < 0)
+                {
+                    throw new ArgumentException($" this ID:({id}) doen't have enough inventory, please lower your value: ", nameof(amount));
+                }
+
+                result.Quantity -= parsedAmount;
+                context.SaveChanges();
+            }
+            return result;
+        }
 
     }
 }
