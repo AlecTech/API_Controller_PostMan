@@ -23,59 +23,61 @@ namespace APIControllerPostManPractice.Controllers
         {
             int parsedQty;
             bool parsedDiscontinued;
-            //name validation: IsNull
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException(nameof(name), "Product name is missing");
-            }
-            else
-            {
-                name = name.ToUpper().Trim();
-            }
-            //discontinued validation: IsNull, if it is then default to NOT NULL
-            if (string.IsNullOrEmpty(discontinued))
-            {
-                parsedDiscontinued = false;
-            }
-            else
-            {
-                discontinued = discontinued.ToUpper().Trim();
-                if (!bool.TryParse(discontinued, out parsedDiscontinued))
-                {
-                    throw new ArgumentException("Discontinued status must be selected otherwise it will be false");
-                }
-            }
-            //quantity validation: ISNULL if it is then throw exception
-            if (string.IsNullOrWhiteSpace(quantity))
-            {
-                quantity = "0";
-                throw new ArgumentNullException(nameof(quantity), "Product quantity not provided assuming Zero.");        
-            }
-            else
-            {//test if parsed: if its ok the check if its not less than zero
-                quantity = quantity.Trim();
-                if (!int.TryParse(quantity, out parsedQty))
-                {
-                    throw new ArgumentException("Product quantity not valid, please enter intiger");
-                }
-                else
-                {
-                    if (parsedQty < 0)
-                    {
-                        throw new ArgumentException("Product quantity can not be negaive");
-                    }
-                }
-            }
-            //if all good then create product object with parsed and tested properties
-            Product newProduct = new Product()
-            {
-                Name = name,
-                Quantity = parsedQty,
-                Discontinued = parsedDiscontinued
-            };
 
             using (InventoryContext context = new InventoryContext())
             {
+                //name validation: IsNull
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    throw new ArgumentNullException(nameof(name), "Product name is missing");
+                }
+                else
+                {
+                    name = name.ToUpper().Trim();
+                }
+                //discontinued validation: IsNull, if it is then default to NOT NULL
+                if (string.IsNullOrEmpty(discontinued))
+                {
+                    parsedDiscontinued = false;
+                }
+                else
+                {
+                    discontinued = discontinued.ToUpper().Trim();
+                    if (!bool.TryParse(discontinued, out parsedDiscontinued))
+                    {
+                        throw new ArgumentException("Discontinued status must be selected otherwise it will be false");
+                    }
+                }
+                //quantity validation: ISNULL if it is then throw exception
+                if (string.IsNullOrWhiteSpace(quantity))
+                {
+                    quantity = "0";
+                    throw new ArgumentNullException(nameof(quantity), "Product quantity not provided assuming Zero.");
+                }
+                else
+                {//test if parsed: if its ok the check if its not less than zero
+                    quantity = quantity.Trim();
+                    if (!int.TryParse(quantity, out parsedQty))
+                    {
+                        throw new ArgumentException("Product quantity not valid, please enter intiger");
+                    }
+                    else
+                    {
+                        if (parsedQty < 0)
+                        {
+                            throw new ArgumentException("Product quantity can not be negaive");
+                        }
+                    }
+                }
+                //if all good then create product object with parsed and tested properties
+                Product newProduct = new Product()
+                {
+                    Name = name,
+                    Quantity = parsedQty,
+                    Discontinued = parsedDiscontinued
+                };
+
+
                 context.Products.Add(newProduct);
                 context.SaveChanges();
                 //newProduct = null;
@@ -83,6 +85,21 @@ namespace APIControllerPostManPractice.Controllers
             }
      
         }
+
+        public List<Product> GetProducts()
+        {
+            List<Product> results;
+            using (InventoryContext context = new InventoryContext())
+            {
+                results = context.Products.Include(x => x.Name).ToList();
+            }
+            return results;
+        }
+
+
+
+
+
         //public Product CreateProduct(string categoryID, string name)
         //{
 
