@@ -91,7 +91,8 @@ namespace APIControllerPostManPractice.Controllers
             List<Product> results;
             using (InventoryContext context = new InventoryContext())
             {
-                results = context.Products.ToList();
+                results = context.Products.Where(x => x.Discontinued == false).OrderBy(x => x.Quantity).ToList();
+                //results = context.Products.ToList();
             }
             return results;
         }
@@ -110,9 +111,19 @@ namespace APIControllerPostManPractice.Controllers
                 throw new ArgumentException(nameof(productID) + " is not valid.", nameof(productID));
             }
 
+            //using (InventoryContext context = new InventoryContext()) 
+            //{
+            //    result = context.Products.Where(x => x.ID == parsedID).Include(x => x.Name).Single();
+            //}
+
             using (InventoryContext context = new InventoryContext())
             {
-                result = context.Products.Where(x => x.ID == parsedID).Include(x => x.Name).Single();
+                if (!context.Products.Any(x => x.ID == parsedID))
+                {
+                    throw new KeyNotFoundException($"{nameof(productID)} {parsedID} does not exist.");
+                }
+
+                result = context.Products.ToList().Where(x => x.ID == parsedID).Single();
             }
             return result;
         }

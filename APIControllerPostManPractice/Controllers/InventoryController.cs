@@ -39,10 +39,36 @@ namespace APIControllerPostManPractice.Controllers
             {
                 result = NotFound(e.Message);
             }
+            catch (KeyNotFoundException e)
+            {
+                result = NotFound(e.Message);
+            }
             return result;
         }
 
+        //[HttpGet("ByCategoryID")]
+        //public ActionResult<IEnumerable<Product>> ProductsByCategoryID_GET(string categoryID)
+        //{
+        //    ActionResult<IEnumerable<Product>> result;
+        //    try
+        //    {
+        //        result = new ProductController().GetProductsByCategoryID(categoryID);
 
+        //    }
+        //    catch (ArgumentNullException e)
+        //    {
+        //        result = BadRequest(e.Message);
+        //    }
+        //    catch (ArgumentException e)
+        //    {
+        //        result = BadRequest(e.Message);
+        //    }
+        //    catch (KeyNotFoundException e)
+        //    {
+        //        result = NotFound(e.Message);
+        //    }
+        //    return result;
+        //}
 
 
     }
