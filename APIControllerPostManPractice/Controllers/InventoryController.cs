@@ -16,7 +16,34 @@ namespace APIControllerPostManPractice.Controllers
         [HttpGet("All")]
         public ActionResult<IEnumerable<Product>> AllProducts_GET()
         {
-            return new ProductController().GetProducts();
+            return new ProductController().GetInventory();
         }
+
+        [HttpGet("ByID")]
+        public ActionResult<Product> ProductByID_GET(string productID)
+        {
+            ActionResult<Product> result;
+            try
+            {
+                result = new ProductController().GetProductByID(productID);
+            }
+            catch (ArgumentNullException e)
+            {
+                result = BadRequest(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                result = BadRequest(e.Message);
+            }
+            catch (InvalidOperationException e)
+            {
+                result = NotFound(e.Message);
+            }
+            return result;
+        }
+
+
+
+
     }
 }

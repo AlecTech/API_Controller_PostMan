@@ -85,18 +85,37 @@ namespace APIControllerPostManPractice.Controllers
             }
      
         }
-
-        public List<Product> GetProducts()
+        //Gets All Products
+        public List<Product> GetInventory()
         {
             List<Product> results;
             using (InventoryContext context = new InventoryContext())
             {
-                results = context.Products.Include(x => x.Name).ToList();
+                results = context.Products.ToList();
             }
             return results;
         }
+        //Gets ById
+        public Product GetProductByID(string productID)
+        {
+            Product result;
+            int parsedID;
 
+            if (string.IsNullOrWhiteSpace(productID))
+            {
+                throw new ArgumentNullException(nameof(productID), nameof(productID) + " is null.");
+            }
+            if (!int.TryParse(productID, out parsedID))
+            {
+                throw new ArgumentException(nameof(productID) + " is not valid.", nameof(productID));
+            }
 
+            using (InventoryContext context = new InventoryContext())
+            {
+                result = context.Products.Where(x => x.ID == parsedID).Include(x => x.Name).Single();
+            }
+            return result;
+        }
 
 
 
