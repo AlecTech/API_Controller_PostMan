@@ -52,10 +52,10 @@ namespace APIControllerPostManPractice.Controllers
                 if (string.IsNullOrWhiteSpace(quantity))
                 {
                     quantity = "0";
-                    throw new ArgumentNullException(nameof(quantity), "Product quantity not provided assuming Zero.");
+                    //throw new ArgumentNullException(nameof(quantity), "Product quantity not provided assuming Zero.");
                 }
-                else
-                {//test if parsed: if its ok the check if its not less than zero
+               // else
+                //{//test if parsed: if its ok the check if its not less than zero
                     quantity = quantity.Trim();
                     if (!int.TryParse(quantity, out parsedQty))
                     {
@@ -68,7 +68,7 @@ namespace APIControllerPostManPractice.Controllers
                             throw new ArgumentException("Product quantity can not be negaive");
                         }
                     }
-                }
+               // }
                 //if all good then create product object with parsed and tested properties
                 Product newProduct = new Product()
                 {
